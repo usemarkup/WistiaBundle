@@ -2,10 +2,11 @@
 
 namespace Markup\WistiaBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Markup\JobQueueBundle\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -24,5 +25,14 @@ class MarkupWistiaExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+    }
+
+    private function loadApiKey(array $config, ContainerBuilder $container)
+    {
+        if (!isset($config['api_key'])) {
+            throw new InvalidConfigurationException('Api key must be set to use Wistia Data API');
+        }
+        $definition = $container->getDefinition('markup_wistia');
+        $definition->addMethodCall('setApiKey', [$config['api_key']]);
     }
 }
