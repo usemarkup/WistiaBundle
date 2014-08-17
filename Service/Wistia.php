@@ -15,7 +15,7 @@ class Wistia
     public function __construct(
 
     ) {
-        $this->client = new GuzzleClient(self::API_URL);
+        $this->client = new GuzzleClient(['base_url' => self::API_URL]);
     }
 
     public function setApiKey($akiKey)
