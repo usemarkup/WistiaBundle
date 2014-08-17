@@ -1,0 +1,10 @@
+services:
+    markup_wistia:
+       class: Markup\WistiaBundle\Service\Wistia
+
+    markup_wistia.twig.wistia:
+        class: Markup\WistiaBundle\Twig\WistiaExtension
+        arguments:
+            - @markup_wista
+        tags:
+            - { name: twig.extension }

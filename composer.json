@@ -1,0 +1,46 @@
+{
+    "name": "markup/wistia-bundle",
+    "description": "The Markup Wista Bundle contains functionality for communicating with the Wistia Data API",
+    "keywords": ["media", "markup", "wistia", "video"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Calum Brodie",
+            "email": "calum@usemarkup.com"
+        },
+        {
+            "name": "Markup",
+            "homepage": "http://www.usemarkup.com/"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "~2.1",
+        "twig/twig": ">=1.12",
+        "php": ">=5.4.0",
+        "guzzlehttp/guzzle": "~4.0",
+        "psr/cache": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.1.*",
+        "mockery/mockery": "0.9.0"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Crell/Cache.git"
+        }
+    ],
+    "suggests": {
+        "symfony/console": "To perform operations using the console"
+    },
+    "autoload": {
+        "psr-0": { "Markup\\WistiaBundle": "" }
+    },
+    "target-dir": "Markup/WistiaBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
