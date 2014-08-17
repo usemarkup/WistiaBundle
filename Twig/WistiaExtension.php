@@ -3,18 +3,24 @@
 namespace Markup\WistiaBundle\Twig;
 
 use Markup\WistiaBundle\Service\Wistia;
+use Psr\Log\LoggerInterface;
 
 class WistiaExtension extends \Twig_Extension
 {
+    private $wistia;
+    private $logger;
+
     /**
      * @var \Twig_Environment
      */
     private $twig;
 
     public function __construct(
-        Wistia $wistia
+        Wistia $wistia,
+        LoggerInterface $logger
     ) {
         $this->wistia = $wistia;
+        $this->logger = $logger;
     }
 
     /**
@@ -41,16 +47,22 @@ class WistiaExtension extends \Twig_Extension
 
     public function getMediaInformation($id)
     {
-        $data = $this->wistia->mediaShow($id);
+        try {
+            $data = $this->wistia->mediaShow($id);
 
-        $assets = $data['assets'];
-        $keyed = [];
-        foreach ($assets as $key => $attributes) {
-            $keyed[$attributes['type']] = $assets[$key];
+            $assets = $data['assets'];
+            $keyed = [];
+            foreach ($assets as $key => $attributes) {
+                $keyed[$attributes['type']] = $assets[$key];
+            }
+            $data['assets'] = $keyed;
+
+            return $data;
+        } catch (\Exception $e) {
+            $this->logger->warn(sprintf('Lookup for wistia video ID `%s` failed: %s', $id, $e->getMessage()));
         }
-        $data['assets'] = $keyed;
 
-        return $data;
+        return null;
     }
 
     public function getName()
