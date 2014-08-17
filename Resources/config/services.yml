@@ -5,6 +5,6 @@ services:
     markup_wistia.twig.wistia:
         class: Markup\WistiaBundle\Twig\WistiaExtension
         arguments:
-            - @markup_wista
+            - @markup_wistia
         tags:
             - { name: twig.extension }

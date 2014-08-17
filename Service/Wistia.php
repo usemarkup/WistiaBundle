@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class Wistia
 {
     const API_URL = 'https://api.wistia.com/v1/';
-    const API_URL = 'api';
+    const API_USER = 'api';
 
     private $apiKey;
 
