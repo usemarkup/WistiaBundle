@@ -43,6 +43,13 @@ class WistiaExtension extends \Twig_Extension
     {
         $data = $this->wistia->mediaShow($id);
 
+        $assets = $data['assets'];
+        $keyed = [];
+        foreach ($assets as $key => $attributes) {
+            $keyed[$attributes['type']] = $assets[$key];
+        }
+        $data['assets'] = $keyed;
+
         return $data;
     }
 

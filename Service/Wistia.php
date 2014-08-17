@@ -18,7 +18,7 @@ class Wistia
         $this->client = new GuzzleClient(['base_url' => self::API_URL]);
     }
 
-    public function setApiKey($akiKey)
+    public function setApiKey($apiKey)
     {
         $this->apiKey = $apiKey;
     }
@@ -26,9 +26,11 @@ class Wistia
     public function mediaShow($id)
     {
         $url = sprintf('medias/%s.json', $id);
+
+        return $this->doRequest($url);
     }
 
-    private function doRequest($endpointUrl, array $options)
+    private function doRequest($endpointUrl, array $options = array())
     {
         // $options = $this->mergeOptions($options);
         // //only use cache if this is a Content Delivery API request
@@ -39,8 +41,8 @@ class Wistia
         //     return $this->buildResponseFromRaw(json_decode($cacheItem->get(), $assoc = true));
         // }
 
-        $request = $client->get($endpointUrl);
-        $request->setAuth(self::API_USER, $this->apiKey);
+        $request = $this->client->createRequest('GET', $endpointUrl, ['auth' => [self::API_USER, $this->apiKey]]);
+        //$request->setAuth(self::API_USER, $this->apiKey);
         // $request->setHeader('Authorization', hash('md5', sprintf('%s:%s', self::API_USER, $this->apiKey));
 
         // $this->setAuthHeaderOnRequest($request, $spaceData['access_token']);
@@ -66,7 +68,7 @@ class Wistia
         //     $cacheItem->set(json_encode($response->json()));
         //     $cache->save($cacheItem);
         // }
-        return json_decode($response->json());
+        return $response->json();
     }
 
 }

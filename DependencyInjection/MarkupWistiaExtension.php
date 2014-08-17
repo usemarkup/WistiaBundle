@@ -25,6 +25,8 @@ class MarkupWistiaExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        $this->loadApiKey($config, $container);
     }
 
     private function loadApiKey(array $config, ContainerBuilder $container)
