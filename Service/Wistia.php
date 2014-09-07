@@ -3,6 +3,8 @@
 namespace Markup\WistiaBundle\Service;
 
 use GuzzleHttp\Client as GuzzleClient;
+use Markup\WistiaBundle\Cache\NullCacheItemPool;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Wistia
@@ -11,10 +13,14 @@ class Wistia
     const API_USER = 'api';
 
     private $apiKey;
+    private $cache;
+    private $timeout;
 
     public function __construct(
 
     ) {
+        $this->timeout = 5;
+        $this->connectTimeout = 3;
         $this->client = new GuzzleClient(['base_url' => self::API_URL]);
     }
 
@@ -30,23 +36,29 @@ class Wistia
         return $this->doRequest($url);
     }
 
+    private function getOptions()
+    {
+        $o = [
+            'timeout' => $this->timeout,
+            'connect_timeout' => $this->connectTimeout,
+            'auth' => [self::API_USER, $this->apiKey]
+        ];
+
+        return $o;
+    }
+
     private function doRequest($endpointUrl, array $options = array())
     {
-        // $options = $this->mergeOptions($options);
-        // //only use cache if this is a Content Delivery API request
-        // $cacheKey = $this->generateCacheKey($spaceData['key'], $queryType, $cacheDisambiguator, $filters);
-        // $cache = $this->ensureCache($spaceData['cache']);
-        // $cacheItem = $cache->getItem($cacheKey);
-        // if ($api === self::CONTENT_DELIVERY_API && $cacheItem->isHit()) {
-        //     return $this->buildResponseFromRaw(json_decode($cacheItem->get(), $assoc = true));
-        // }
+        // cache on the basis of the url...
+        $cache = $this->getCache();
+        $cacheKey = $endpointUrl;
 
-        $request = $this->client->createRequest('GET', $endpointUrl, ['auth' => [self::API_USER, $this->apiKey]]);
-        //$request->setAuth(self::API_USER, $this->apiKey);
-        // $request->setHeader('Authorization', hash('md5', sprintf('%s:%s', self::API_USER, $this->apiKey));
+        $cacheItem = $cache->getItem($cacheKey);
+        if ($cacheItem->isHit()) {
+            return json_decode($cacheItem->get(), $assoc = true);
+        }
 
-        // $this->setAuthHeaderOnRequest($request, $spaceData['access_token']);
-        // $this->setApiVersionHeaderOnRequest($request, $api);
+        $request = $this->client->createRequest('GET', $endpointUrl, $this->getOptions());
 
         try {
             $response = $this->client->send($request);
@@ -64,11 +76,36 @@ class Wistia
             );
         }
         //save into cache
-        // if ($api === self::CONTENT_DELIVERY_API) {
-        //     $cacheItem->set(json_encode($response->json()));
-        //     $cache->save($cacheItem);
-        // }
+        if ($cache instanceof CacheItemPoolInterface) {
+            $cacheItem->set(json_encode($response->json()));
+            $cache->save($cacheItem);
+        }
+
         return $response->json();
+    }
+
+    public function setConnectTimeout($connectTimeout)
+    {
+        $this->connectTimeout = $connectTimeout;
+    }
+
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+    }
+
+    public function setCache($cache)
+    {
+        $this->cache = $cache;
+    }
+
+    private function getCache()
+    {
+        if (!$this->cache instanceof CacheItemPoolInterface) {
+            return new NullCacheItemPool();
+        }
+
+        return $this->cache;
     }
 
 }

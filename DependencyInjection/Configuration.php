@@ -25,6 +25,15 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('api_key')
                 ->defaultNull()
             ->end()
+            ->integerNode('timeout')
+                ->defaultValue(5)->min(0)->max(30)
+            ->end()
+            ->integerNode('connect_timeout')
+                ->defaultValue(3)->min(0)->max(30)
+            ->end()
+            ->scalarNode('cache')
+                ->defaultNull()
+            ->end()
         ->end();
 
         return $treeBuilder;

@@ -6,6 +6,7 @@ use Markup\JobQueueBundle\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -27,6 +28,8 @@ class MarkupWistiaExtension extends Extension
         $loader->load('services.yml');
 
         $this->loadApiKey($config, $container);
+        $this->loadCache($config, $container);
+        $this->setTimeout($config, $container);
     }
 
     private function loadApiKey(array $config, ContainerBuilder $container)
@@ -36,5 +39,22 @@ class MarkupWistiaExtension extends Extension
         }
         $definition = $container->getDefinition('markup_wistia');
         $definition->addMethodCall('setApiKey', [$config['api_key']]);
+    }
+
+    private function loadCache(array $config, ContainerBuilder $container)
+    {
+        if (!isset($config['cache']) || !$config['cache']) {
+            return;
+        }
+        $cache = new Reference($config['cache']);
+        $definition = $container->getDefinition('markup_wistia');
+        $definition->addMethodCall('setCache', [$cache]);
+    }
+
+    private function setTimeout(array $config, ContainerBuilder $container)
+    {
+        $definition = $container->getDefinition('markup_wistia');
+        $definition->addMethodCall('setTimeout', [$config['timeout']]);
+        $definition->addMethodCall('setConnectTimeout', [$config['connect_timeout']]);
     }
 }

@@ -1,3 +1,0 @@
-markup_wistia_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: MarkupWistiaBundle:Default:index }
