@@ -63,7 +63,7 @@ class Wistia
         try {
             $response = $this->client->send($request);
         } catch (RequestException $e) {
-            throw new NotFoundHttpException($exceptionMessage);
+            throw new NotFoundHttpException($e->getMessage());
         }
         if ($response->getStatusCode() !== '200') {
             throw new NotFoundHttpException(
