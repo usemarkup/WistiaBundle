@@ -26,12 +26,6 @@
         "mockery/mockery": "~0.9",
         "egils/cache": ">=0.1"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/Crell/Cache.git"
-        }
-    ],
     "suggests": {
         "symfony/console": "To perform operations using the console"
     },
