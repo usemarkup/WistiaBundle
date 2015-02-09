@@ -18,7 +18,7 @@
         "symfony/framework-bundle": "~2.1",
         "twig/twig": ">=1.12",
         "php": ">=5.4.0",
-        "guzzlehttp/guzzle": "~4.0",
+        "guzzlehttp/guzzle": ">=4.0",
         "psr/cache-implementation": "1.0.0"
     },
     "require-dev": {
