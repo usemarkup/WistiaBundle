@@ -65,7 +65,7 @@ class Wistia
         } catch (RequestException $e) {
             throw new NotFoundHttpException($e->getMessage());
         }
-        if ($response->getStatusCode() !== '200') {
+        if ($response->getStatusCode() != '200') {
             throw new NotFoundHttpException(
                 sprintf(
                     'Wistia returned a "%s - %s" response.',
