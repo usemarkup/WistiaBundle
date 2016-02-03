@@ -19,12 +19,11 @@
         "twig/twig": ">=1.12",
         "php": ">=5.4.0",
         "guzzlehttp/guzzle": ">=4.0",
-        "psr/cache-implementation": "1.0.0"
+        "psr/cache": "1.0.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.5",
-        "mockery/mockery": "~0.9",
-        "egils/cache": ">=0.1"
+        "mockery/mockery": "~0.9"
     },
     "suggests": {
         "symfony/console": "To perform operations using the console"
