@@ -3,6 +3,7 @@
 namespace Markup\WistiaBundle\Service;
 
 use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Exception\GuzzleException;
 use Markup\WistiaBundle\Cache\NullCacheItemPool;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -47,7 +48,7 @@ class Wistia
         return $o;
     }
 
-    private function doRequest($endpointUrl, array $options = array())
+    private function doRequest($endpointUrl)
     {
         // cache on the basis of the url...
         $cache = $this->getCache();
@@ -62,7 +63,7 @@ class Wistia
 
         try {
             $response = $this->client->send($request);
-        } catch (RequestException $e) {
+        } catch (GuzzleException $e) {
             throw new NotFoundHttpException($e->getMessage());
         }
         if ($response->getStatusCode() != '200') {
@@ -106,5 +107,4 @@ class Wistia
 
         return $this->cache;
     }
-
 }
