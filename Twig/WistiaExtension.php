@@ -5,30 +5,31 @@ namespace Markup\WistiaBundle\Twig;
 use Markup\WistiaBundle\Service\Wistia;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class WistiaExtension
+ *
+ * @package Markup\WistiaBundle\Twig
+ */
 class WistiaExtension extends \Twig_Extension
 {
+    /** @var Wistia */
     private $wistia;
+
+    /** @var LoggerInterface */
     private $logger;
 
     /**
-     * @var \Twig_Environment
+     * WistiaExtension constructor.
+     *
+     * @param Wistia          $wistia
+     * @param LoggerInterface $logger
      */
-    private $twig;
-
     public function __construct(
         Wistia $wistia,
         LoggerInterface $logger
     ) {
         $this->wistia = $wistia;
         $this->logger = $logger;
-    }
-
-    /**
-     * @param \Twig_Environment $environment
-     */
-    public function initRuntime(\Twig_Environment $environment)
-    {
-        $this->twig = $environment;
     }
 
     /**
@@ -45,6 +46,11 @@ class WistiaExtension extends \Twig_Extension
         ];
     }
 
+    /**
+     * @param $id
+     *
+     * @return mixed|null
+     */
     public function getMediaInformation($id)
     {
         try {
@@ -65,6 +71,9 @@ class WistiaExtension extends \Twig_Extension
         return null;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'markup_wistia';
