@@ -5,7 +5,7 @@ services:
     markup_wistia.twig.wistia:
         class: Markup\WistiaBundle\Twig\WistiaExtension
         arguments:
-            - @markup_wistia
-            - @logger
+            - '@markup_wistia'
+            - '@logger'
         tags:
             - { name: twig.extension }
