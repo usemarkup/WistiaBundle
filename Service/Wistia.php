@@ -83,6 +83,23 @@ class Wistia
         return $response->json();
     }
 
+    /**
+     * @return bool
+     */
+    public function mediaExists($id)
+    {
+        $url = sprintf('medias/%s.json', $id);
+
+        try {
+            $media = $this->doRequest($url);
+            return true;
+        } catch (\Exception $e) {
+            // there was an exception while doing the media lookup
+            // assume 404 or some other issue with wista
+            return false;
+        }
+    }
+
     public function setConnectTimeout($connectTimeout)
     {
         $this->connectTimeout = $connectTimeout;
