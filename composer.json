@@ -1,6 +1,6 @@
 {
     "name": "markup/wistia-bundle",
-    "description": "The Markup Wista Bundle contains functionality for communicating with the Wistia Data API",
+    "description": "The Markup Wistia Bundle contains functionality for communicating with the Wistia Data API",
     "keywords": ["media", "markup", "wistia", "video"],
     "type": "symfony-bundle",
     "license": "MIT",
@@ -29,9 +29,8 @@
         "symfony/console": "To perform operations using the console"
     },
     "autoload": {
-        "psr-0": { "Markup\\WistiaBundle": "" }
+        "psr-4": { "Markup\\WistiaBundle\\": "" }
     },
-    "target-dir": "Markup/WistiaBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
